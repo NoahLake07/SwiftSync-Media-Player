@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SwiftSync Media Player:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SwiftSync_Media_Player_jar</output-path>
+    <root id="archive" name="MediaPlayerController.jar">
+      <element id="module-output" name="SwiftSync Media Player" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/uk/co/caprica/vlcj/4.8.3/vlcj-4.8.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/uk/co/caprica/vlcj-natives/4.8.3/vlcj-natives-4.8.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/java/dev/jna/jna-jpms/5.14.0/jna-jpms-5.14.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/java/dev/jna/jna-platform-jpms/5.14.0/jna-platform-jpms-5.14.0.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/res" />
+    </root>
+  </artifact>
+</component>
