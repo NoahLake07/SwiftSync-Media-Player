@@ -29,14 +29,23 @@ public class MediaPlayerPanel extends JPanel {
     private final JLabel timeLabel;
     private boolean isPlaying;
     private String currentMediaPath;
+    private Color background, background2, foreground;
 
     public static final Color DARK_MODE = new Color(45,45,45);
     public static final Color LIGHT_MODE = new Color(245, 245, 245);
 
+    public MediaPlayerPanel(){
+        this(DARK_MODE.darker(), DARK_MODE, Color.WHITE);
+    }
+
     /**
      * Constructs a MediaPlayerComponent.
      */
-    public MediaPlayerPanel() {
+    public MediaPlayerPanel(Color background, Color background2, Color foreground) {
+        this.background = background;
+        this.background2 = background2;
+        this.foreground = foreground;
+
         setLayout(new BorderLayout());
 
         mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
@@ -44,7 +53,7 @@ public class MediaPlayerPanel extends JPanel {
 
         JPanel controlsPanel = new JPanel();
         controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS));
-        controlsPanel.setBackground(DARK_MODE);
+        controlsPanel.setBackground(background);
 
         try {
             playPauseButton = createIconButton("mediaplayer-playicon.png", "Play");
@@ -61,17 +70,17 @@ public class MediaPlayerPanel extends JPanel {
         volumeSlider.setValue(50);
 
         timeLabel = new JLabel("00:00:00");
-        timeLabel.setForeground(Color.WHITE);
+        timeLabel.setForeground(foreground);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBackground(new Color(45, 45, 45));
+        buttonPanel.setBackground(background);
         buttonPanel.add(playPauseButton);
         buttonPanel.add(openFileLocationButton);
 
         JPanel sliderPanel = new JPanel();
         sliderPanel.setLayout(new FlowLayout());
-        sliderPanel.setBackground(new Color(45, 45, 45));
+        sliderPanel.setBackground(background2);
         sliderPanel.add(timeLabel);
         sliderPanel.add(positionSlider);
         sliderPanel.add(volumeSlider);
@@ -129,7 +138,7 @@ public class MediaPlayerPanel extends JPanel {
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setToolTipText(tooltip);
-        button.setForeground(Color.WHITE);
+        button.setForeground(foreground);
         button.setFocusPainted(false);
         return button;
     }
@@ -141,14 +150,30 @@ public class MediaPlayerPanel extends JPanel {
      */
     private JSlider createSlider(int prefWidth) {
         JSlider slider = new JSlider();
-        slider.setBackground(new Color(45, 45, 45));
-        slider.setForeground(Color.WHITE);
+        slider.setBackground(background2);
+        slider.setForeground(foreground);
         slider.setPreferredSize(new Dimension(prefWidth, 30));
         return slider;
     }
 
     public boolean isPlaying(){
         return isPlaying;
+    }
+
+    public String getCurrentMediaPath(){
+        return currentMediaPath;
+    }
+
+    public Color getBackground() {
+        return background;
+    }
+
+    public Color getBackground2(){
+        return background2;
+    }
+
+    public Color getForeground() {
+        return foreground;
     }
 
     /**
@@ -299,6 +324,28 @@ public class MediaPlayerPanel extends JPanel {
         mediaPlayerComponent.release();
     }
 
+    public void nextFrame(){
+        double fps = FrameRateExtractor.getFrameRate(currentMediaPath);
+        if (fps != 0) {
+            long millisecondsPerFrame = (long) (1000 / fps);
+            mediaPlayerComponent.mediaPlayer().controls().skipTime(millisecondsPerFrame);
+        } else {
+            // Default to 60fps if frame rate is not available
+            mediaPlayerComponent.mediaPlayer().controls().skipTime(1000/60);
+        }
+    }
+
+    public void prevFrame(){
+        double fps = FrameRateExtractor.getFrameRate(currentMediaPath);
+        if (fps != 0) {
+            long millisecondsPerFrame = (long) (1000 / fps);
+            mediaPlayerComponent.mediaPlayer().controls().skipTime(-millisecondsPerFrame);
+        } else {
+            // Default to 60fps if frame rate is not available
+            mediaPlayerComponent.mediaPlayer().controls().skipTime(-1000/60);
+        }
+    }
+
     /**
      * Sets the maximum size for the MediaPlayerComponent.
      *
@@ -316,8 +363,6 @@ public class MediaPlayerPanel extends JPanel {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
-
 
         JFrame frame = new JFrame("SwiftSync Media Player");
         frame.setSize(800, 600);

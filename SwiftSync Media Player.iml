@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="uk.co.caprica.vlcj" level="project" />
+    <orderEntry type="library" name="openimaj.xuggle.video" level="project" />
   </component>
 </module>
