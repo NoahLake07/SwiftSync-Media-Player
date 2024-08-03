@@ -147,6 +147,10 @@ public class MediaPlayerPanel extends JPanel {
         return slider;
     }
 
+    public boolean isPlaying(){
+        return isPlaying;
+    }
+
     /**
      * Registers action listeners for the media control buttons and sliders.
      */
@@ -211,7 +215,7 @@ public class MediaPlayerPanel extends JPanel {
     /**
      * Toggles between play and pause states.
      */
-    private void togglePlayPause() throws IOException {
+    public void togglePlayPause() throws IOException {
         if (isPlaying) {
             mediaPlayerComponent.mediaPlayer().controls().pause();
             InputStream playIconStream = getClass().getResourceAsStream("/mediaplayer-playicon.png");
@@ -275,7 +279,7 @@ public class MediaPlayerPanel extends JPanel {
     /**
      * Opens the file location of the current media.
      */
-    private void openFileLocation() {
+    public void openFileLocation() {
         if (currentMediaPath != null) {
             File file = new File(currentMediaPath);
             if (file.exists()) {
